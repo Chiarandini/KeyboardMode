@@ -1,10 +1,13 @@
 local M = {}
 
 local japanese_mode = false
+local config = {
+  english_layout = 'Canadian',
+  japanese_layout = 'Hiragana'
+}
 
 -- Check if keyboardSwitcher is installed
 local function check_keyboard_switcher()
-  -- Use vim.fn.executable instead of which
   return vim.fn.executable('keyboardSwitcher') == 1
 end
 
@@ -31,19 +34,18 @@ local function should_ignore_buffer()
 end
 
 -- Switch keyboard layout using keyboardSwitcher
-local function switch_keyboard(layout_name)
+local function switch_keyboard(layout_type)
   if should_ignore_buffer() then
     return
   end
 
-  local layout_map = {
-    ['Japanese'] = 'Hiragana',
-    ['Canadian English'] = 'Canadian'
-  }
-
-  local layout_id = layout_map[layout_name]
-  if not layout_id then
-    vim.notify("Unknown layout: " .. layout_name, vim.log.levels.ERROR)
+  local layout_id
+  if layout_type == 'Japanese' then
+    layout_id = config.japanese_layout
+  elseif layout_type == 'English' then
+    layout_id = config.english_layout
+  else
+    vim.notify("Unknown layout type: " .. layout_type, vim.log.levels.ERROR)
     return
   end
 
@@ -54,13 +56,12 @@ function M.toggle()
   japanese_mode = not japanese_mode
 
   if japanese_mode then
-    vim.notify("Japanese mode: ON", vim.log.levels.INFO)
 	vim.g.JapaneseMode = true
   else
-    vim.notify("Japanese mode: OFF", vim.log.levels.INFO)
-    switch_keyboard('Canadian English')
+    switch_keyboard('English')
 	vim.g.JapaneseMode = false
   end
+  vim.api.nvim_exec_autocmds('User', { pattern = 'JapaneseModeChanged' })
 end
 
 local function setup_autocommands()
@@ -79,13 +80,20 @@ local function setup_autocommands()
     group = group,
     callback = function()
       if japanese_mode then
-        switch_keyboard('Canadian English')
+        switch_keyboard('English')
       end
     end,
   })
 end
 
-function M.setup()
+
+function M.setup(opts)
+  opts = opts or {}
+
+  -- Merge user config with defaults
+  config.english_layout = opts.english_layout or 'Canadian'
+  config.japanese_layout = opts.japanese_layout or 'Hiragana'
+
   if vim.fn.has('mac') == 0 then
     vim.notify('Japanese mode: macOS only', vim.log.levels.ERROR)
     return

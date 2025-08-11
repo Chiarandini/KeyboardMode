@@ -51,6 +51,37 @@ vim.keymap.set('n', '<leader>j', function()
 end, { desc = 'Toggle Japanese mode' })
 ```
 
+## Examples
+
+### For US English users:
+```lua
+require("japanese-mode").setup({
+  english_layout = 'U.S.',
+  japanese_layout = 'Hiragana'
+})
+```
+
+### For users who prefer Katakana:
+```lua
+require("japanese-mode").setup({
+  english_layout = 'Canadian',
+  japanese_layout = 'Katakana'
+})
+```
+
+## Common Layout Names
+
+### English Layouts
+- `'Canadian'` (default)
+- `'U.S.'`
+- `'British'`
+- `'Australian'`
+
+### Japanese Layouts
+- `'Hiragana'` (default)
+- `'Katakana'`
+- `'Romaji'`
+
 ## Usage
 
 1. Press your toggle keybinding (e.g., `<leader>j`) to enable Japanese mode
@@ -58,11 +89,6 @@ end, { desc = 'Toggle Japanese mode' })
 3. When you leave insert mode (`<Esc>`), the keyboard will automatically switch back to English
 4. Press the toggle again to disable Japanese mode
 
-## Keyboard Layouts
-
-The plugin switches between:
-- **English**: "Canadian" (you can modify this in the code if you use a different English layout)
-- **Japanese**: "Hiragana"
 
 ## Ignored Contexts
 
@@ -71,17 +97,6 @@ The plugin won't switch keyboards in these contexts to avoid conflicts:
 - Picker prompts (dressing.nvim)
 - Notification windows
 - Other prompt buffers
-
-## Configuration
-
-The plugin works out of the box, but you can modify the keyboard layout names in the code if needed:
-
-```lua
-local layout_map = {
-  ['Japanese'] = 'Hiragana',        -- Change this if you use a different Japanese input method
-  ['Canadian English'] = 'Canadian' -- Change this to match your English layout
-}
-```
 
 ## Heirline Integration
 
