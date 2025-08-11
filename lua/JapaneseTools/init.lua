@@ -55,9 +55,11 @@ function M.toggle()
 
   if japanese_mode then
     vim.notify("Japanese mode: ON", vim.log.levels.INFO)
+	vim.g.JapaneseMode = true
   else
     vim.notify("Japanese mode: OFF", vim.log.levels.INFO)
     switch_keyboard('Canadian English')
+	vim.g.JapaneseMode = false
   end
 end
 
@@ -93,7 +95,7 @@ function M.setup()
     vim.notify('keyboardSwitcher not found. Please install it with: brew install lutzifer/homebrew-tap/keyboardSwitcher', vim.log.levels.ERROR)
     return
   end
-
+  vim.g.JapaneseMode = false
   setup_autocommands()
 end
 

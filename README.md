@@ -83,6 +83,29 @@ local layout_map = {
 }
 ```
 
+## Heirline Integration
+
+I also have a heirline component to indicate when I'm in japanese mode:
+
+```lua
+--Japanese mode
+-- {{
+local JapaneseMode = {
+  condition = function()
+    return vim.g.JapaneseMode == true
+  end,
+
+  hl = { fg = colors.default_blue },
+
+  provider = function()
+    return "J"
+  end,
+}
+-- }}
+```
+I put this in my "mode" component so that there is a "J" to remind me the keyboard will
+switch layout when in insert mode.
+
 ## Troubleshooting
 
 If the plugin reports that `keyboardSwitcher` is not found:
