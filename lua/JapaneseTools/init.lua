@@ -62,10 +62,19 @@ function M.toggle()
 	vim.g.JapaneseMode = false
   end
   vim.api.nvim_exec_autocmds('User', { pattern = 'JapaneseModeChanged' })
+  vim.cmd('redrawstatus')
 end
 
 local function setup_autocommands()
   local group = vim.api.nvim_create_augroup('JapaneseMode', { clear = true })
+
+  vim.api.nvim_create_autocmd('User', {
+	  group = group,
+	  pattern = "JapaneseModeChanged",
+	  callback = function()
+		vim.cmd("checktime")
+	  end,
+  })
 
   vim.api.nvim_create_autocmd('InsertEnter', {
     group = group,
