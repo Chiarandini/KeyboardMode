@@ -84,6 +84,27 @@ local function setup_autocommands()
       end
     end,
   })
+
+    -- Search mode switching
+  vim.api.nvim_create_autocmd('CmdlineEnter', {
+    group = group,
+    pattern = '/',
+    callback = function()
+      if japanese_mode then
+        switch_keyboard('Japanese')
+      end
+    end,
+  })
+
+  vim.api.nvim_create_autocmd('CmdlineLeave', {
+    group = group,
+    pattern = '/',
+    callback = function()
+      if japanese_mode then
+        switch_keyboard('English')
+      end
+    end,
+  })
 end
 
 
