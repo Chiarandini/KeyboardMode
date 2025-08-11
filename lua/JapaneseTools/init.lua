@@ -17,7 +17,8 @@ local function should_ignore_buffer()
     'DressingInput',
     'noice',
     'notify',
-    'prompt'
+    'prompt',
+    'Oil'
   }
 
   for _, ignored_ft in ipairs(ignored_filetypes) do
