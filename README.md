@@ -29,27 +29,25 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  -- Put your plugin files in ~/.config/nvim/lua/japanese-mode.lua
-  dir = vim.fn.stdpath("config") .. "/lua",
-  name = "japanese-mode",
+  -- Put your plugin files in ~/.config/nvim/lua/JapaneseTools.lua
+  "Chiarandini/JapaneseTools",
   config = function()
-    require("japanese-mode").setup()
+    require("JapaneseTools").setup()
   end,
 }
 ```
 
-Or manually: Copy the plugin code to `~/.config/nvim/lua/japanese-mode.lua`
 
 ## Setup
 
 Add to your Neovim configuration:
 
 ```lua
-require("japanese-mode").setup()
+require("JapaneseTools").setup()
 
 -- Create a keybinding to toggle Japanese mode
 vim.keymap.set('n', '<leader>j', function()
-  require('japanese-mode').toggle()
+  require('JapaneseTools').toggle()
 end, { desc = 'Toggle Japanese mode' })
 ```
 
