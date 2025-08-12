@@ -1,6 +1,10 @@
 # KeyboardMode.nvim
 
-A generalized Neovim plugin for automatic keyboard layout switching on macOS. Originally designed for Japanese input switching, now supports any keyboard layout available on your system.
+A Neovim plugin for automatic keyboard layout switching on macOS when entering insert
+mode, while keeping an English layout (or really any layout the user wants) when in normal
+mode. The goal is to keep be able to keep using vim bindings in normal mode while typing
+in the users preferred language.
+
 
 ## Features
 
