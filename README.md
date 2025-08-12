@@ -1,4 +1,4 @@
-# KeyboardTools.nvim
+# KeyboardMode.nvim
 
 A generalized Neovim plugin for automatic keyboard layout switching on macOS. Originally designed for Japanese input switching, now supports any keyboard layout available on your system.
 
@@ -21,9 +21,9 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  dir = "Chiarandini/KeyboardTools",
+  dir = "Chiarandini/KeyboardMode",
   config = function()
-    require("KeyboardTools").setup({
+    require("KeyboardMode").setup({
       default_layout = "Canadian",    -- Your default keyboard layout
       alternate_layout = "Hiragana"   -- Layout to switch to in insert mode
     })
@@ -36,7 +36,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 The plugin accepts the following options:
 
 ```lua
-require("KeyboardTools").setup({
+require("KeyboardMode").setup({
   default_layout = "Canadian",      -- Default layout (fallback to first available)
   alternate_layout = "Hiragana"     -- Alternate layout (fallback to second available)
 })
@@ -64,17 +64,17 @@ You can set up keyboard shortcuts to control the plugin:
 ```lua
 -- Toggle keyboard mode
 vim.keymap.set('n', '<leader>kt', function()
-  require('KeyboardTools').toggle()
+  require('KeyboardMode').toggle()
 end, { desc = 'Toggle keyboard mode' })
 
 -- Enable alternate layout
 vim.keymap.set('n', '<leader>ke', function()
-  require('KeyboardTools').enable()
+  require('KeyboardMode').enable()
 end, { desc = 'Enable alternate keyboard' })
 
 -- Disable alternate layout
 vim.keymap.set('n', '<leader>kd', function()
-  require('KeyboardTools').disable()
+  require('KeyboardMode').disable()
 end, { desc = 'Disable alternate keyboard' })
 ```
 
@@ -135,7 +135,7 @@ keyboardSwitcher list
 Or from within the plugin:
 
 ```lua
-local layouts = require('KeyboardTools').get_available_layouts()
+local layouts = require('KeyboardMode').get_available_layouts()
 vim.print(layouts)
 ```
 
