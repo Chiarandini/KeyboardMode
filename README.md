@@ -8,7 +8,6 @@ A generalized Neovim plugin for automatic keyboard layout switching on macOS. Or
 - 🎛️ **Configurable Layouts**: Support for any keyboard layout available on your macOS system
 - ✅ **Layout Validation**: Automatically validates that configured layouts are available on your system
 - 🚫 **Smart Buffer Filtering**: Ignores certain buffer types (Telescope, Oil, etc.)
-- 🧪 **Comprehensive Test Suite**: Fully tested with automated test runner
 - 📡 **Status Integration**: Provides global variables for statusline integration
 
 ## Prerequisites
