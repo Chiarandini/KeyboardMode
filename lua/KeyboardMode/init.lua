@@ -58,7 +58,7 @@ end
 local function should_ignore_buffer()
   local filetype = vim.bo.filetype
 
-  for _, ignored_ft in ipairs(ignored_filetypes) do
+  for _, ignored_ft in ipairs(config.ignored_filetypes) do
     if filetype == ignored_ft then
       return true
     end
