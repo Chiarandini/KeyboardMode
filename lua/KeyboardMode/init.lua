@@ -4,6 +4,15 @@ local keyboard_mode = false
 local config = {
   default_layout = 'Canadian',
   alternate_layout = 'Hiragana',
+  ignored_filetypes = {
+    'TelescopePrompt',
+    'DressingSelect',
+    'DressingInput',
+    'noice',
+    'notify',
+    'prompt',
+    'Oil'
+  },
   available_layouts = {}
 }
 
@@ -48,15 +57,6 @@ end
 -- Check if current buffer should be ignored
 local function should_ignore_buffer()
   local filetype = vim.bo.filetype
-  local ignored_filetypes = {
-    'TelescopePrompt',
-    'DressingSelect',
-    'DressingInput',
-    'noice',
-    'notify',
-    'prompt',
-    'Oil'
-  }
 
   for _, ignored_ft in ipairs(ignored_filetypes) do
     if filetype == ignored_ft then
@@ -225,6 +225,15 @@ function M.setup(opts)
 
   config.default_layout = opts.default_layout or 'Canadian'
   config.alternate_layout = opts.alternate_layout or 'Hiragana'
+  config.ignored_filetypes = opts.ignored_filetypes or {
+    'TelescopePrompt',
+    'DressingSelect',
+    'DressingInput',
+    'noice',
+    'notify',
+    'prompt',
+    'Oil'
+  }
 
   if not validate_layout(config.default_layout) then
     vim.notify('KeyboardTools: Default layout "' .. config.default_layout .. '" not available. Using first available layout: ' .. config.available_layouts[1], vim.log.levels.WARN)
