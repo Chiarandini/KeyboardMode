@@ -1,134 +1,179 @@
-# Japanese Mode for Neovim
+# KeyboardTools.nvim
 
-A simple Neovim plugin that automatically switches between Japanese (Hiragana) and English keyboard layouts when entering and leaving insert mode.
+A generalized Neovim plugin for automatic keyboard layout switching on macOS. Originally designed for Japanese input switching, now supports any keyboard layout available on your system.
 
 ## Features
 
-- Toggle Japanese mode on/off
-- Automatically switches to Hiragana when entering insert mode (when Japanese mode is enabled)
-- Automatically switches back to English when leaving insert mode
-- Ignores prompts and pickers (Telescope, etc.) to avoid input conflicts
-- macOS only
+- 🔄 **Automatic Layout Switching**: Automatically switches to your alternate keyboard layout when entering insert mode or search mode
+- 🎛️ **Configurable Layouts**: Support for any keyboard layout available on your macOS system
+- ✅ **Layout Validation**: Automatically validates that configured layouts are available on your system
+- 🚫 **Smart Buffer Filtering**: Ignores certain buffer types (Telescope, Oil, etc.)
+- 🧪 **Comprehensive Test Suite**: Fully tested with automated test runner
+- 📡 **Status Integration**: Provides global variables for statusline integration
 
-## Requirements
+## Prerequisites
 
-- macOS
-- [keyboardSwitcher](https://github.com/lutzifer/homebrew-tap) - A command-line tool for switching keyboard layouts
+- macOS (required)
+- [keyboardSwitcher](https://github.com/lutzifer/homebrew-tap) - Install with: `brew install lutzifer/homebrew-tap/keyboardSwitcher`
 
 ## Installation
-
-### 1. Install keyboardSwitcher
-
-```bash
-brew install lutzifer/homebrew-tap/keyboardSwitcher
-```
-
-### 2. Install the plugin
 
 Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  -- Put your plugin files in ~/.config/nvim/lua/JapaneseTools.lua
-  "Chiarandini/JapaneseTools",
+  dir = "Chiarandini/KeyboardTools",
   config = function()
-    require("JapaneseTools").setup()
-  end,
+    require("KeyboardTools").setup({
+      default_layout = "Canadian",    -- Your default keyboard layout
+      alternate_layout = "Hiragana"   -- Layout to switch to in insert mode
+    })
+  end
 }
 ```
 
+## Configuration
 
-## Setup
-
-Add to your Neovim configuration:
+The plugin accepts the following options:
 
 ```lua
-require("JapaneseTools").setup()
-
--- Create a keybinding to toggle Japanese mode
-vim.keymap.set('n', '<leader>j', function()
-  require('JapaneseTools').toggle()
-end, { desc = 'Toggle Japanese mode' })
-```
-
-## Examples
-
-### For US English users:
-```lua
-require("japanese-mode").setup({
-  english_layout = 'U.S.',
-  japanese_layout = 'Hiragana'
+require("KeyboardTools").setup({
+  default_layout = "Canadian",      -- Default layout (fallback to first available)
+  alternate_layout = "Hiragana"     -- Alternate layout (fallback to second available)
 })
 ```
 
-### For users who prefer Katakana:
+## Available Methods
+
+### Core Functions
+
+- `toggle()` - Toggle between default and alternate keyboard modes
+- `enable()` - Enable alternate keyboard mode
+- `disable()` - Disable alternate keyboard mode (return to default)
+- `is_enabled()` - Check if alternate keyboard mode is currently enabled
+
+### Layout Management
+
+- `get_available_layouts()` - Get list of all available keyboard layouts
+- `get_config()` - Get current plugin configuration
+- `switch_to_layout(layout_name)` - Temporarily switch to a specific layout
+
+## Keyboard Shortcuts
+
+You can set up keyboard shortcuts to control the plugin:
+
 ```lua
-require("japanese-mode").setup({
-  english_layout = 'Canadian',
-  japanese_layout = 'Katakana'
-})
+-- Toggle keyboard mode
+vim.keymap.set('n', '<leader>kt', function()
+  require('KeyboardTools').toggle()
+end, { desc = 'Toggle keyboard mode' })
+
+-- Enable alternate layout
+vim.keymap.set('n', '<leader>ke', function()
+  require('KeyboardTools').enable()
+end, { desc = 'Enable alternate keyboard' })
+
+-- Disable alternate layout
+vim.keymap.set('n', '<leader>kd', function()
+  require('KeyboardTools').disable()
+end, { desc = 'Disable alternate keyboard' })
 ```
 
-## Common Layout Names
+## Status Line Integration
 
-### English Layouts
-- `'Canadian'` (default)
-- `'U.S.'`
-- `'British'`
-- `'Australian'`
-
-### Japanese Layouts
-- `'Hiragana'` (default)
-- `'Katakana'`
-- `'Romaji'`
-
-## Usage
-
-1. Press your toggle keybinding (e.g., `<leader>j`) to enable Japanese mode
-2. When you enter insert mode (`i`, `a`, `o`, etc.), the keyboard will automatically switch to Hiragana
-3. When you leave insert mode (`<Esc>`), the keyboard will automatically switch back to English
-4. Press the toggle again to disable Japanese mode
-
-
-## Ignored Contexts
-
-The plugin won't switch keyboards in these contexts to avoid conflicts:
-- Telescope prompts
-- Picker prompts (dressing.nvim)
-- Notification windows
-- Other prompt buffers
-
-## Heirline Integration
-
-I also have a heirline component to indicate when I'm in japanese mode:
+The plugin sets a global variable `vim.g.KeyboardMode` that you can use in your statusline:
 
 ```lua
---Japanese mode
--- {{
-local JapaneseMode = {
+-- Example for lualine
+{
+  function()
+    return vim.g.KeyboardMode and "🌸" or "🔤"
+  end
+}
+
+-- Example for heirline
+{
   condition = function()
-    return vim.g.JapaneseMode == true
+    return vim.g.KeyboardMode
   end,
-
-  hl = { fg = colors.default_blue },
-
-  provider = function()
-    return "J"
-  end,
+  provider = "🌸",
 }
--- }}
 ```
-I put this in my "mode" component so that there is a "J" to remind me the keyboard will
-switch layout when in insert mode.
+
+## Events
+
+The plugin triggers a `KeyboardModeChanged` User event when the keyboard mode changes:
+
+```lua
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'KeyboardModeChanged',
+  callback = function()
+    print('Keyboard mode changed!')
+  end,
+})
+```
+
+## Behavior
+
+The plugin automatically:
+
+1. **Insert Mode**: Switches to alternate layout when entering insert mode, back to default when leaving
+2. **Search Mode**: Switches to alternate layout when entering search (`/`), back to default when leaving
+3. **Buffer Filtering**: Ignores switching in special buffer types:
+   - TelescopePrompt
+   - DressingSelect/DressingInput
+   - noice/notify/prompt
+   - Oil
+
+## Finding Available Layouts
+
+To see what keyboard layouts are available on your system:
+
+```bash
+keyboardSwitcher list
+```
+
+Or from within the plugin:
+
+```lua
+local layouts = require('KeyboardTools').get_available_layouts()
+vim.print(layouts)
+```
+
+## Testing
+
+Run the test suite:
+
+```bash
+lua run_tests.lua
+```
+
+The plugin includes comprehensive tests covering:
+- Setup with default and custom configurations
+- Layout validation and fallbacks
+- Toggle/enable/disable functionality
+- Layout switching capabilities
+- Error handling for invalid configurations
+
+## Migration from JapaneseTools
+
+If you're migrating from the original JapaneseTools plugin:
+
+1. **Global Variables**: `vim.g.JapaneseMode` → `vim.g.KeyboardMode`
+2. **Events**: `JapaneseModeChanged` → `KeyboardModeChanged`
+3. **Config Keys**: `english_layout`/`japanese_layout` → `default_layout`/`alternate_layout`
 
 ## Troubleshooting
 
-If the plugin reports that `keyboardSwitcher` is not found:
+### keyboardSwitcher not found
+Install keyboardSwitcher: `brew install lutzifer/homebrew-tap/keyboardSwitcher`
 
-1. Make sure it's installed: `brew install lutzifer/homebrew-tap/keyboardSwitcher`
-2. Check that it's in your PATH: `which keyboardSwitcher`
-3. Restart Neovim after installation
+### Layout not available
+Check available layouts with `keyboardSwitcher list` and update your configuration accordingly.
+
+### Not working on non-Mac systems
+This plugin only works on macOS due to the keyboardSwitcher dependency.
 
 ## License
 
-This plugin is provided as-is. Feel free to modify and distribute.
+MIT License - feel free to use and modify as needed!
