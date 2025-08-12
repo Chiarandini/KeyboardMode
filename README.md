@@ -155,14 +155,6 @@ The plugin includes comprehensive tests covering:
 - Layout switching capabilities
 - Error handling for invalid configurations
 
-## Migration from JapaneseTools
-
-If you're migrating from the original JapaneseTools plugin:
-
-1. **Global Variables**: `vim.g.JapaneseMode` → `vim.g.KeyboardMode`
-2. **Events**: `JapaneseModeChanged` → `KeyboardModeChanged`
-3. **Config Keys**: `english_layout`/`japanese_layout` → `default_layout`/`alternate_layout`
-
 ## Troubleshooting
 
 ### keyboardSwitcher not found
@@ -172,8 +164,4 @@ Install keyboardSwitcher: `brew install lutzifer/homebrew-tap/keyboardSwitcher`
 Check available layouts with `keyboardSwitcher list` and update your configuration accordingly.
 
 ### Not working on non-Mac systems
-This plugin only works on macOS due to the keyboardSwitcher dependency.
-
-## License
-
-MIT License - feel free to use and modify as needed!
+This plugin only was tested on macOS due to the keyboardSwitcher dependency.
