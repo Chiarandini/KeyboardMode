@@ -143,20 +143,20 @@ local layouts = require('KeyboardMode').get_available_layouts()
 vim.print(layouts)
 ```
 
-## Testing
-
-Run the test suite:
-
-```bash
-lua run_tests.lua
-```
-
-The plugin includes comprehensive tests covering:
-- Setup with default and custom configurations
-- Layout validation and fallbacks
-- Toggle/enable/disable functionality
-- Layout switching capabilities
-- Error handling for invalid configurations
+<!-- ## Testing -->
+<!---->
+<!-- Run the test suite: -->
+<!---->
+<!-- ```bash -->
+<!-- lua run_tests.lua -->
+<!-- ``` -->
+<!---->
+<!-- The plugin includes comprehensive tests covering: -->
+<!-- - Setup with default and custom configurations -->
+<!-- - Layout validation and fallbacks -->
+<!-- - Toggle/enable/disable functionality -->
+<!-- - Layout switching capabilities -->
+<!-- - Error handling for invalid configurations -->
 
 ## Troubleshooting
 
